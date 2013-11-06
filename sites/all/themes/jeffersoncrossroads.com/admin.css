@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* Admin CSS Document For jeffersoncrossroads.com */
+/* $Id: admin.css Inclind Inc. */
+
+div.withQuickLinks {overflow:visible !important;}
+fieldset.collapsible {border:1px solid #9FE0CA; padding:10px; margin-bottom:10px;}
+div#edit-domains--1-wrapper, div#edit-domains-2-wrapper, div#edit-domain-source-wrapper {display:none;}
+
+
+div.admin {overflow:hidden;}
+.left {float:left;}
+.right {float:right;}

@@ -1,0 +1,60 @@
+<?php
+/* $Id: inclind_panels.module,v 1.0 2008/11/13 12:30:00 kevin@inclind.com Exp $ */
+
+// this lets wysiwyg/tinymce work with the javascript aggregator module
+
+function inclind_panels_ctools_plugin_directory($module, $plugin) {
+	if ($module == 'ctools') {
+		return 'plugins/' . $plugin;
+	}
+}
+
+
+function inclind_panels_form_alter(&$form, $form_state, $form_id) {
+
+	if ($form_id == "panels_content_config_form") {
+
+		$options = array('' => '');
+		$fields = content_fields();
+		$field_types = _content_field_types();
+		foreach ($fields as $field_name => $field) {
+			$type_info = $field_types[$field['type']];
+			foreach ($type_info['formatters'] as $formatter_name => $formatter) {
+				$label= $type_info['label'] .':'. $field['widget']['label'] ;
+				$label .= $field['widget']['label'] != $field_name ? ' ('. $field_name .')' : '';
+				$options[$label][$field_name .':'. $formatter_name] = $formatter['label'];
+			}
+		}
+		ksort($options);
+
+		$field_formatter = array(
+			'#type' => 'select',
+			'#options' => $options, 
+			'#description' => 'Choose a specific field to display',
+			'#title' => 'Node Field',
+			'#default_value' => $form_state['pane']->configuration['field_formatter'],
+		); 
+		$form['configuration']['field_formatter'] = $field_formatter;
+	}
+
+}
+
+function inclind_panels_content_view_field(&$node, $conf) {
+	$data = explode(':', $conf['field_formatter']);
+	$field_name = $data[0]; 
+	$formatter = $data[1];
+
+	$field = content_fields($field_name);
+
+	// Force panel settings into the field's display settings.
+
+	$field['display_settings']['label']['format'] = isset($field['display_settings']['label']['format']) ? $field['display_settings']['label']['format'] : 'hidden';
+	$field['display_settings']['full']['format'] = $formatter;
+	$field['display_settings']['teaser']['format'] = $formatter;
+	$node->build_mode = NODE_BUILD_NORMAL;
+	// TODO : allow panel-specific template suggestions for content-field.tpl.php ?
+
+	$output = content_view_field($field, $node); 
+	return $output;
+}
+

@@ -1,0 +1,11 @@
+; $Id: jump.info,v 1.1.4.2 2008/07/11 22:41:07 marcp Exp $
+name = "Jump"
+description = "Turns a menu into a pick list"
+core = 6.x
+
+; Information added by drupal.org packaging script on 2008-07-11
+version = "6.x-1.0"
+core = "6.x"
+project = "jump"
+datestamp = "1215816621"
+

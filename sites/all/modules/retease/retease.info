@@ -1,0 +1,11 @@
+; $Id: retease.info,v 1.2.2.1 2008/04/27 18:35:22 douggreen Exp $
+name = ReTease
+description = Rebuild the node teasers
+core = 6.x
+
+; Information added by drupal.org packaging script on 2008-04-28
+version = "6.x-1.x-dev"
+core = "6.x"
+project = "retease"
+datestamp = "1209341407"
+

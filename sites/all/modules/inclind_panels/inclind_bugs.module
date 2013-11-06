@@ -1,0 +1,9 @@
+<?php
+/* $Id: inclind_bugs.module,v 1.0 2008/11/13 12:30:00 kevin@inclind.com Exp $ */
+
+// this lets wysiwyg/tinymce work with the javascript aggregator module
+function inclind_bugs_wysiwyg_plugin() {
+        global $conf;
+//	new dBug($conf);
+        $conf['preprocess_js'] = 0;
+}

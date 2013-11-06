@@ -1,0 +1,10 @@
+<?php
+// $Id: faceted_search_ui.install,v 1.7 2008/08/26 04:28:10 davidlesieur Exp $
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function faceted_search_ui_uninstall() {
+  db_query("DELETE FROM {blocks} WHERE module = 'faceted_search_ui'");
+}
+

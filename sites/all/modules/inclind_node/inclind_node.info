@@ -1,0 +1,13 @@
+; $Id: nat.info,v 1.5 2008/05/14 20:54:37 kquillen Exp $
+name = Inclind Node
+description = Utility module for removing certain aspects of node forms for different node types
+core = 6.x
+package = Inclind
+
+
+; Information added by drupal.org packaging script on 2008-11-06
+version = "6.x-1.0"
+core = "6.x"
+project = "inclind"
+datestamp = "1225930175"
+

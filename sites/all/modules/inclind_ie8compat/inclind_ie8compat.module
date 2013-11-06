@@ -1,0 +1,17 @@
+<?php
+// $Id: inclind_ie8compat.module,v 1.0 2009/01/30 12:00:00 kquillen Exp $
+
+/**
+ * @file
+ * Adds the new IE8 meta tag to the site header so it renders the site as if it were IE7.
+ */
+
+/**
+ * Implementation of hook_init().
+ */
+function inclind_ie8compat_init() {
+	if (preg_match('/MSIE 8/', $_SERVER['HTTP_USER_AGENT'])) {
+		$data = '<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />';
+		drupal_set_html_head($data);
+	}
+}

@@ -1,0 +1,151 @@
+<?php
+// $Id: jump.module,v 1.1.4.1 2008/05/30 03:51:23 marcp Exp $
+
+/**
+ * @file
+ * Provides an API for adding jump menus based on configured
+ * menus, vocabularies, or custom php code.
+ */
+
+/**
+ * Implementation of hook_block().
+ */
+function jump_block($op = 'list', $delta = 0, $edit = array()) {
+  if ($op == 'list') {
+    $blocks = array();
+    foreach (menu_get_menus() as $name => $title) {
+      $blocks['menu:'. $name] = array(
+        'info' => t('Jump menu: !menu', array('!menu' => $name))
+      );
+    }
+    
+    $vocs = taxonomy_get_vocabularies();
+    foreach ($vocs as $vid => $vocabulary) {
+      $blocks['taxo:'. $vid] = array(
+        'info' => t('Jump menu: !voc', array('!voc' => $vocabulary->name))
+      );
+    }
+    return $blocks;
+  }
+  else if ($op == 'view') {
+    // The first 5 characters of $delta should be one of:
+    //    menu:
+    //    taxo:
+    $jumpmenu_type = substr($delta, 0, 4);
+    $jumpmenu_name = substr($delta, 5);
+    if ($jumpmenu_type == 'menu') {
+      $form = jump_quickly($jumpmenu_name);
+    }
+    else if ($jumpmenu_type == 'taxo') {
+      $form = jump_quickly($jumpmenu_name, 'taxo');
+    }
+
+    return array('subject' => $subject, 'content' => $form);
+  }
+}
+
+/**
+ * Get a quick-jump menu form that contains a dropdown and a go button.
+ *
+ * @param $name If it's an array, then these are the options for the
+ * select box.  If it's a scalar, then check the type to see what it
+ * means.
+ * @param $type If 'menu' then $name is the menu name from which
+ * the options will be derived.  If 'taxo' then $name is the vocabulary
+ * id from which the terms will be derived.
+ */
+function jump_quickly($name = 'navigation', $type = 'menu') {
+  if (is_array($name)) {
+    $options = $name;
+  }
+  else {
+    $options = array();
+    if ($type == 'menu') {
+      jump_menu_get_menu_options($options, $name);
+    }
+    else if ($type = 'taxo') {
+      jump_menu_get_taxo_options($options, $name);
+    }
+  }
+
+  // Give each form on the page a unique id so we can handle multiple
+  // jump forms...
+  static $num_jump_forms = 0;
+  $num_jump_forms++;
+  return drupal_get_form('jump_quickly_form_'. $num_jump_forms, $options);
+}
+
+function jump_quickly_form(&$form_state, $options) {
+  $form = array();
+  $form['#submit'][] = 'jump_quickly_form_submit';
+  $form['#theme'] = 'jump_quickly_form';
+  $form['#attributes']['class'] = 'jump-quickly';
+  $form['jump_goto'] = array(
+    '#type' => 'select',
+    '#default_value' => '0',
+    '#options' => $options
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Go')
+  );
+
+  return $form;
+}
+
+function jump_quickly_form_submit($form, &$form_state) {
+  if (!empty($form_state['values']['jump_goto'])) {
+    drupal_goto($form_state['values']['jump_goto']);
+  }
+}
+
+function theme_jump_quickly_form($form) {
+  $output = '<div class="container-inline">';
+  $output .= drupal_render($form['jump_goto']);
+  $output .= drupal_render($form['submit']);
+  $output .= '</div>';
+  $output .= drupal_render($form);
+  return $output;  
+}
+
+function jump_menu_get_menu_options(&$options, $name) {
+  $tree = menu_tree_page_data($name);
+  foreach ($tree as $data) {
+    if (!$data['link']['hidden']) {
+      $options[$data['link']['href']] = $data['link']['title'];
+    }
+  }
+}
+
+function jump_menu_get_taxo_options(&$options, $vid) {
+  $tree = taxonomy_get_tree($vid);
+  foreach ($tree as $term) {
+    $options[taxonomy_term_path($term)] = $term->name;
+  }
+}
+
+/**
+ * Implementation of hook_forms() - allows us to use the same
+ * callbacks for forms with different ids.
+ */ 
+function jump_forms($form_id) {
+  // Ensure we map a callback for our form and not something else
+  $forms = array();
+  if (strpos($form_id, 'jump_quickly_form') === 0) {
+    // Let the forms API know where to get the form data corresponding
+    // to this form id.
+    $forms[$form_id] = array('callback' => 'jump_quickly_form');
+  }
+  return $forms;
+}
+
+/**
+ * Implementation of hook_theme()...
+ */
+function jump_theme() {
+  return array(
+    'jump_quickly_form' => array(
+      'arguments' => array('form')
+    )
+  );
+}

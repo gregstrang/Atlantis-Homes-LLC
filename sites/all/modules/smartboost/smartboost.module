@@ -1,0 +1,59 @@
+<?php
+// $Id: boost.module,v 1.3.2.2.2.5.2.18 2008/10/25 16:30:34 arto Exp $
+
+/**
+ * @file
+ * Provides static page caching for Drupal.
+ */
+
+//////////////////////////////////////////////////////////////////////////////
+// Module settings
+define('BOOST_FILE_PATH',            variable_get('boost_file_path', boost_cache_directory(NULL, FALSE)));
+
+//////////////////////////////////////////////////////////////////////////////
+// Core API hooks
+
+/**
+ * Implementation of hook_help(). Provides online user help.
+ */
+function smartboost_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#smartboost':
+      if (file_exists($file = drupal_get_path('module', 'smartboost') . '/README.txt')) {
+        return '<pre>' . implode("\n", array_slice(explode("\n", @file_get_contents($file)), 2)) . '</pre>';
+      }
+      break;
+    case 'admin/settings/performance/smartboost':
+      return '<p>' . t('') . '</p>'; // TODO: add help text.
+  }
+}
+
+/**
+ * Implementation of hook_cron(). Performs periodic actions.
+ */
+function smartboost_cron() {
+  if (!BOOST_ENABLED) return;
+
+  variable_set('boost_expire_cron', FALSE);
+
+  if (smartboost_cache_expire_all()) {
+    watchdog('smartboost', 'Expired stale files from static page cache.', array(), WATCHDOG_NOTICE);
+  }
+}
+
+
+function smartboost_cache_expire_all() {
+	return boost_cache_expire_all( 'smartboost_test_expiration' );
+}
+
+
+function smartboost_test_expiration($file) {
+	$filename = substr($file, strlen(BOOST_FILE_PATH) + 1, strlen($file));
+
+	if (strpos($filename, 'node/') === 0) {
+		return false;
+	}
+
+	return boost_file_is_expired($file);
+}
+

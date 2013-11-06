@@ -1,0 +1,75 @@
+<?php
+// $Id: inclind_menu.install,v 1.9 2008/05/14 20:54:37 petes Exp $
+
+/**
+ * Implementation of hook_install().
+ */
+function inclind_menu_install() {
+  return;
+
+  drupal_install_schema('inclind_menu');
+  drupal_set_message(t('NAT module: Installation script complete.'));
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function inclind_menu_schema() {
+  $schema['inclind_menu'] = array(
+    'description' => t('NAT module: establish relationship between nids and tids.'),
+    'fields' => array(
+      'nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t('Index: Node ID.')
+      ),
+      'tid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t('Term ID.')
+      ),
+      'vid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t('Vocabulary ID.')
+      ),
+    ),
+    'indexes' => array('nid' => array('nid'))
+  );
+
+  return $schema;
+}
+
+/**
+ * Add a vid column to the inclind_menu table.
+ */
+function inclind_menu_update_2() {
+  switch ($GLOBALS['db_type']) {
+    case 'mysqli':
+    case 'mysql':
+      $ret[] = update_sql("ALTER TABLE {inclind_menu} ADD vid int NOT NULL DEFAULT 0");
+      break;
+    case 'pgsql':
+      db_add_column($ret, 'inclind_menu', 'vid', 'int', array('not null' => TRUE, 'default' => 0));
+      break;
+  }
+
+  $result = db_query('SELECT n.nid, n.tid, td.vid FROM {inclind_menu} n INNER JOIN {term_data} td USING (tid)');
+  while ($node = db_fetch_array($result)) {
+    db_query('UPDATE {inclind_menu} SET vid = %d WHERE nid = %d AND tid = %d', $node['vid'], $node['nid'], $node['tid']);
+  }
+  
+  return $ret;
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function inclind_menu_uninstall() {
+  variable_del('inclind_menu_config');
+  drupal_uninstall_schema('inclind_menu');
+  drupal_set_message(t('Inclind Menu module: Uninstallation script complete.'));
+}

@@ -1,0 +1,425 @@
+@charset "utf-8";
+/* CSS Document For atlantishomesllc.com */
+/* $Id: style.css Inclind Inc. */
+
+/*****************
+* Reset
+*****************/
+/* $Id: reset.css,v 1.1 2009/03/17 05:04:14 andregriffin Exp $ */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td, thead th, tbody th {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+
+/* common styling */
+:focus { outline: 1px dotted; }
+address, form, hr, table, ul, ol, dl, pre { margin-bottom: 1.5em; }
+abbr, acronym { text-transform: uppercase; font-size: 85%; letter-spacing: .1em; }
+abbr[title], acronym[title], dfn[title] { cursor: help; border-bottom: 1px dotted #000; }
+ins { border-bottom: 1px dotted #000; text-decoration:none; }
+del {	text-decoration: line-through; }
+q { quotes: "\201C""\201D""\2018""\2019"; }
+blockquote { color: #666; margin-left: 2.2em; }
+small, sup, sub { font-size: 85%; }
+big { font-size: 125%; line-height:80%; }
+sup { vertical-align: super; }
+sub { vertical-align: sub; }
+pre { white-space: pre; }
+cite, em, dfn { font-style: italic; }
+code { font-size: 100%; font-family: mono-space, monospace; }
+strong, th, thead td, dt { font-weight: bold; }
+table { border-collapse: collapse; border-spacing: 0; }
+hr { background: black; border: medium none; display: block; height: 1px; }
+img, a img { border: none; outline: none; }
+
+/*****************
+* Layout
+*****************/
+body {font-size:12px; font-family:Arial, Verdana, Helvetica, sans-serif; color:#333; background:#e4e4e4 url(./images/layout/bodyBackground.jpg) left 68px repeat-x;}
+
+div#wrapper {position:relative; background:transparent url(./images/layout/wrapperBackground.gif) top left repeat-y; height:100%; width:894px; margin:0 auto;}
+
+h1 {font-size:1.8em; color:#156C35; font-weight:700; padding-bottom:5px;}
+h2 {font-size:1.5em; color:#156C35; font-weight:700; padding-bottom:5px;}
+h3 {font-size:1.3em; color:#333; font-weight:700; padding-bottom:5px;}
+h4 {font-size:1.1em; color:#666; font-weight:700; padding-bottom:5px;}
+h5 {font-size:1em; color:#156C35; font-weight:700; padding-bottom:5px;}
+p,ul,ol,blockquote,table {margin-bottom:10px;}
+a:link, a:visited {text-decoration:none; font-size:1.1em; color:#156735;}
+div#centerContent a:link, div#centerContent a:visited {text-decoration:underline; color:#156735 !important;}
+a:hover, a:active {color:#A3CE00;}
+
+/*****************
+* Navigation
+** See: ./nice_menus.css
+*****************/
+
+/*****************
+* Header
+*****************/
+
+div#header {float:left; width:894px; background:transparent url(./images/layout/headerBackground.jpg) left 90px repeat-x;}
+div#header div#logo {float:left; display:inline; margin-left:14px; background:transparent url(./images/layout/logoBackground.jpg) top left no-repeat; width:240px; height:190px;}
+div#header div#logo a {outline:none;}
+div#header div#logo img.logo {margin:15px 0 0 5px;}
+div#header div#slogan {float:left; width:635px; height:99px; text-align:center; background:transparent url(./images/layout/sloganBackgroundBottom.gif) left 68px repeat-x;}
+div#header div#slogan div.sloganText {width:635px; height:45px; padding-top:22px; color:#fff; font-size:1.6em; background:transparent url(./images/layout/sloganBackground-noSlogan.jpg) top left no-repeat; text-shadow:#326F45 1px 1px;}
+div#slogan div.breadcrumb {width:628px; margin:10px 0 3px; padding:0 0 0 7px; text-align:left;}
+
+/*****************
+* Container
+*****************/
+
+div#container {position:relative; width:886px; padding:0 4px; clear:both;}
+div#container div#containerContent {width:862px; padding:0 12px 0 12px; margin-bottom:10px;}
+div#container div#banner {position:relative; margin:0 auto; overflow:hidden;}
+/* Large Banner */
+div#container div.bannerLarge {width:862px; height:253px; top:-6px;}
+div#container div.bannerLarge div.bannerCover {position:absolute; height:253px; z-index:2; cursor:pointer;}
+div#container div.bannerLarge div.block {height:253px;}
+/* Small Banner */
+/* 1 column */
+body div.bannerSmall {width:860px; border:1px solid #94CA96;}
+body div.bannerSmall  img {width:850px; height:auto; border-width:5px; border-style:solid; border-color:#fff;}
+/* 3 columns */
+body.sidebars div.bannerSmall {width:370px; border:1px solid #94CA96;}
+body.sidebars div.bannerSmall img {width:360px; height:auto; border-width:5px; border-style:solid; border-color:#fff;}
+/* 2 columns */
+body.sidebar-left div.bannerSmall, body.sidebar-right div.bannerSmall {width:615px; border:1px solid #94CA96;}
+body.sidebar-left div.bannerSmall img, body.sidebar-right div.bannerSmall img {width:605px; height:auto; border-width:5px; border-style:solid; border-color:#fff;}
+
+div#container div.bannerSmall div.content div.image_cycle_pictures {line-height:0;}
+
+/* 1 column */
+div#center {position:relative; width:862px; padding:0; margin-bottom:10px;}
+
+/* 3 columns */
+body.sidebars div#center {float: left; width: 372px;}
+
+/* 2 columns - sidebar-left */
+body.sidebar-left div#center {float: left; width: 617px;}
+
+/* 2 columns - sidebar-right */
+body.sidebar-right div#center {float: left; width: 617px;}
+
+div#center div#centerContent h2 {margin:5px 0;}
+div#center div#centerContent h2.title {margin:0;}
+div#center div#centerContent ul li, div#center div#centerContent ol li {margin-left:20px;}
+
+/* Center withQuickLinks */
+body div#center div.withQuickLinks {width:699px; padding-left:10px;}
+body div#center div.withQuickLinks div.panel-display {width:699px;}
+body.sidebars div#center div.withQuickLinks {width:209px; overflow:hidden;}
+body.sidebars div#center div.withQuickLinks div.panel-display {width:209px;}
+body.sidebar-left div#center div.withQuickLinks, body.sidebar-right div#center div.withQuickLinks {float:left; width:449px;}
+body.sidebar-left div#center div.withQuickLinks div.panel-display, body.sidebar-right div#center div.withQuickLinks div.panel-display{width:449px;}
+
+div#center div#quickLinks {float:left; width:153px;}
+div#center div#quickLinks div.block {width:153px; background:transparent url(./images/layout/quickLinksBackground.jpg) top left no-repeat; overflow:hidden;}
+div#center div#quickLinks div.block div.content {width:127px; padding:10px 13px;}
+
+/* Sidebars */
+.sidebar {float:left; width:235px;}
+/* Left and Right(Subpage) */
+div#sidebar-left {margin:0 10px 10px 0; padding-top:2px;}
+div#sidebar-right {margin:0 0 10px 10px; padding-top:2px;}
+div#sidebar-left div.block, div#sidebar-right div.block {margin:0 0 10px;}
+div#sidebar-left div.block h3, div#sidebar-right div.block h3 {background:transparent url(./images/layout/leftBlockHeader.gif) top left no-repeat; padding:11px 0 10px 12px; color:#fff; font-size:1.2em;}
+div#sidebar-left div.block div.content, div#sidebar-right div.block div.content {border-width:1px; border-style:solid; border-color:#ccc;}
+div#sidebar-left div.block div.content ul.menu, div#sidebar-right div.block div.content ul.menu {padding:0;}
+div#sidebar-left div.block div.content ul.menu li, div#sidebar-right div.block div.content ul.menu li {list-style-image:none; list-style:none; background:transparent url(./images/layout/bulletCircularArrow.gif) 12px center no-repeat; margin:0; padding:10px 10px 10px 33px; border-bottom:1px dotted #ccc;}
+div#sidebar-left div.block div.content ul.menu li.last, div#sidebar-right div.block div.content ul.menu li.last {border-bottom:none;}
+div#sidebar-left div.block div.content ul.menu li a:link, div#sidebar-left div.block div.content ul.menu li a:visited, div#sidebar-right div.block div.content ul.menu li a:link, div#sidebar-right div.block div.content ul.menu li a:visited {color:#156C35; font-size:1.2em; outline:none;}
+div#sidebar-left div.block div.content ul.menu li a:hover, div#sidebar-left div.block div.content ul.menu li a:active, div#sidebar-right div.block div.content ul.menu li a:hover, div#sidebar-right div.block div.content ul.menu li a:active {color:#000;}
+
+/* Right(Homepage) */
+div#sidebar-right-homepage {position:relative; margin:-50px 0 0;}
+div#sidebar-right-homepage div.block {position:relative; margin:0 0 10px; border-width:1px; border-style:solid; border-color:#ccc; z-index:100;}
+div#sidebar-right-homepage div.block h3 {position:relative; padding:10px 0; text-align:center; background:#aee8d4 url(./images/layout/sidebarRightHomeBg.jpg) top left repeat-x; color:#fff; font-weight:100; font-size:1.4em; text-shadow:#326F45 1px 1px; z-index:100; border:2px solid #fff;}
+div#sidebar-right-homepage div.block div.content {position:relative; z-index:100;}
+
+/* Generic Panels */
+div.panel-panel {overflow:hidden;}
+
+/* Contact Form Block */
+div#block-nodeasblock-435 {clear:left;}
+div#block-nodeasblock-435 div.content div.content {border:none; padding:5px;}
+div#block-nodeasblock-435 form#webform-client-form-7 div.form-item {padding:0 0 0 3px; margin:3px 0;}
+div#block-nodeasblock-435 input.form-text, div#block-nodeasblock-435 select.form-select {padding:2px 0;}
+div#block-nodeasblock-435 div#webform-component-name input {width:210px;}
+div#block-nodeasblock-435 div#webform-component-email_address input {width:210px;}
+div#block-nodeasblock-435 div#webform-component-phone input {width:210px;}
+div#block-nodeasblock-435 div#webform-component-city,
+div#block-nodeasblock-435 div#webform-component-state {float:left; width:104px;}
+div#block-nodeasblock-435 div#webform-component-state {margin:0 0 0 6px;}
+div#block-nodeasblock-435 div#webform-component-city label, 
+div#block-nodeasblock-435 div#webform-component-state div.form-item label {width:104px;}
+div#block-nodeasblock-435 div#webform-component-city input {width:100px;}
+div#block-nodeasblock-435 div#webform-component-state select {width:104px;}
+div#block-nodeasblock-435 div#webform-component-questionscomments {clear:both;}
+
+/* Request Information Form Block */
+div#block-nodeasblock-103 {clear:left;}
+div#block-nodeasblock-103 div.content div.content {border:none; padding:5px;}
+div#block-nodeasblock-103 form#webform-client-form-7 div.form-item {padding:0 0 0 3px; margin:3px 0;}
+div#block-nodeasblock-103 input.form-text, div#block-nodeasblock-103 select.form-select {padding:2px 0;}
+div#block-nodeasblock-103 div#webform-component-name input {width:210px;}
+div#block-nodeasblock-103 div#webform-component-email_address input {width:210px;}
+div#block-nodeasblock-103 div#webform-component-phone input {width:210px;}
+div#block-nodeasblock-103 div#webform-component-city,
+div#block-nodeasblock-103 div#webform-component-state {float:left; width:104px;}
+div#block-nodeasblock-103 div#webform-component-state {margin:0 0 0 6px;}
+div#block-nodeasblock-103 div#webform-component-city label, 
+div#block-nodeasblock-103 div#webform-component-state div.form-item label {width:104px;}
+div#block-nodeasblock-103 div#webform-component-city input {width:100px;}
+div#block-nodeasblock-103 div#webform-component-state select {width:104px;}
+div#block-nodeasblock-103 div#webform-component-questionscomments {clear:both;}
+
+/* Custom Jump Menu */
+form.jump-quickly {width:99%; margin:0 auto; margin:0; padding:10px 0; text-align:center;}
+
+/* Exposed View Filters */
+div.view-filters {width:95%; padding:10px; margin:0 auto 10px; background-color:#9ACC99; border:1px solid #6FAF6D;}
+div.view-filters input {width:130px;}
+div.view-filters select {padding:1px;}
+div.view-filters input#edit-submit-homes {margin:14px 0 0; width:auto;}
+
+/* Views Vertical List */
+div.item-list {width:100%;}
+div.item-list ul {width:100%;}
+div.item-list li.views-row-odd, div.item-list li.views-row-even {width:100%; list-style:none; margin:0 0 20px !important; clear:left; overflow:hidden;}
+div.item-list span.field-content a:link, div.item-list span.field-content a:visited {font-size:1.2em; font-weight:700;}
+div.item-list div.views-field-field-image-home-fid {float:left; padding:2px; margin:0 10px 5px 0; border:1px solid #ccc;}
+div.item-list div.views-field-field-image-home-fid span.field-content a {float:left; line-height:0;}
+div.item-list label {float:left; font-weight:700; width:85px;}
+div.item-list div.views-field-field-bathrooms-value {float:left; width:200px; margin:0 0 10px;}
+div.item-list div.views-field-field-bedrooms-value {float:left; width:200px; margin:0 0 10px;}
+div.item-list div.views-field-field-price-value {float:left; width:200px; margin:0 0 20px;}
+div.item-list div.views-field-field-square-ft-value {float:left; width:200px; margin:0 0 20px;}
+div.item-list div.views-field-title {margin-bottom:10px; font-size:1.2em;}
+div.item-list div.views-field-body {display:block;}
+
+/* Standard Views */
+div.view div.view-empty {padding:8px;}
+div.view div.view-empty p {margin:0;}
+
+
+/* Homes(Detail) Panel Display */
+div#homeDetail {width:617px;}
+div#homeDetail div.panel-col-first {width:407px; margin:0 10px 0 0;}
+div#homeDetail div.panel-col-first div.views-field-field-image-home-fid {position:relative; width:350px; border:1px solid #ccc; padding:5px; overflow:hidden;}
+div#homeDetail div.panel-col-first div.views-field-field-image-home-fid span.field-content {line-height:0;}
+div#homeDetail div.panel-col-last {width:200px;}
+div#homeDetail div.panel-col-last div.inside {margin:0;}
+div#homeDetail div#standardFeatures h2 {background:transparent url(./images/layout/calloutCenter.gif) top left no-repeat; width:355px; font-size:1.1em; padding:10px 0 15px 10px; margin:0;}
+div#homeDetail div#standardFeatures div.pane-content {width:363px; padding:0; border-width:0 1px 1px; border-style:solid; border-color:#ccc; overflow:hidden;}
+div#homeDetail div#standardFeatures div.pane-content ul {padding:0; margin:0;}
+div#homeDetail div#standardFeatures div.pane-content ul li.views-row-odd, div#homeDetail div#standardFeatures div.pane-content ul li.views-row-even {list-style:none; margin:0 !important; border-bottom:1px dotted #ccc; overflow:hidden; clear:left;}
+div#homeDetail div#standardFeatures div.pane-content ul li.views-row-last {border-bottom:none;}
+div#homeDetail div#standardFeatures div.pane-content ul li div.views-field-field-label-value {float:left; padding:5px; width:90px; font-weight:700;}
+div#homeDetail div#standardFeatures div.pane-content ul li div.views-field-body {float:left; padding:10px; background-color:#EFEAE0; width:243px;}
+
+div#homeDetail div.featuresSmall div.panel-pane {margin:0 0 10px;}
+div#homeDetail div.featuresSmall h2 {background:transparent url(./images/layout/calloutTop.gif) top left no-repeat; width:189px; font-size:1.1em; padding:10px 0 15px 10px; margin:0 !important;}
+div#homeDetail div.featuresSmall div.pane-content {width:197px; border-width:0 1px 1px; border-style:solid; border-color:#ccc; overflow:hidden;}
+div#homeDetail div.featuresSmall div.field-item {padding:2px 0;}
+
+div#homeDetail div#homeStatus {position:relative; margin:0 0 -15px;}
+div#homeDetail div#homeStatus div.views-field-field-condition-value {text-align:right;}
+div#homeDetail div#homeStatus div.views-field-field-condition-value img {margin-right:7px;}
+
+div#homeDetail div#modelFeatures div.pane-content {width:197px; padding:0;}
+div#homeDetail div#modelFeatures div.views-row-odd div, div#homeDetail div#modelFeatures div.views-row-even div {clear:left;}
+div#homeDetail div#modelFeatures label {float:left; width:100px; padding:10px; font-weight:700; border-bottom:1px dotted #ccc;}
+div#homeDetail div#modelFeatures span.field-content {float:left; width:67px; background-color:#EFEAE0; padding:10px 5px; border-bottom:1px dotted #ccc;}
+
+div#homeDetail div#specialAmenities div.pane-content {width:197px; padding:0;}
+div#homeDetail div#specialAmenities div.views-row-odd, div#homeDetail div#specialAmenities div.views-row-even {clear:left; border-bottom:1px dotted #ccc;}
+div#homeDetail div#specialAmenities div.views-field-field-label-value {float:left; width:85px; padding:10px; font-weight:700;}
+div#homeDetail div#specialAmenities div.views-field-body {float:left; width:82px; background-color:#EFEAE0; padding:10px 5px; overflow:hidden;}
+
+
+div#homeDetail div.featuresSmall div.field-item {border-bottom:1px dotted #ccc; padding:10px;}
+div#homeDetail div.featuresSmall div.views-field-field-file-brochure-fid, div#homeDetail div.featuresSmall div.views-field-field-file-floorplans-fid {padding:10px; overflow:hidden;}
+div#homeDetail div.featuresSmall div.views-field-field-file-brochure-fid a:link, div#homeDetail div.featuresSmall div.views-field-field-file-brochure-fid a:visited {float:left; width:177px; height:31px; line-height:0; overflow:hidden; text-indent:-10000px; background:transparent url(./images/layout/brochureCallout.gif) top left no-repeat;}
+div#homeDetail div.featuresSmall div.views-field-field-file-floorplans-fid a:link, div#homeDetail div.featuresSmall div.views-field-field-file-floorplans-fid a:visited {float:left; width:177px; height:31px; line-height:0; overflow:hidden; text-indent:-10000px; background:transparent url(./images/layout/floorplanCallout.gif) top left no-repeat;}
+div#homeDetail div#communities div.field-item , div#homeDetail div#salesLocations div.field-item   {padding:0px;}
+div#homeDetail div#communities span.field-content a:link, div#homeDetail div#communities span.field-content a:visited,  div#homeDetail div#salesLocations span.field-content a:link, div#homeDetail div#salesLocations span.field-content a:visited {padding:10px; display:block;}
+
+
+/* Communities */
+div#communityDetail {width:100%;}
+div#communityDetail div.center-wrapper div.panel-col-first {float:left; width:50%;}
+div#communityDetail div.center-wrapper div.panel-col-first label {font-weight:700;}
+div#communityDetail div.panel-col-first div.views-field-address {margin:0 0 5px;}
+div#communityDetail div.panel-col-first div.views-field-field-email-value, div#communityDetail div.panel-col-first div.views-field-field-fax-value, div#communityDetail div.panel-col-first div.views-field-field-email-address-email {margin:0 0 10px;}
+div#communityDetail div.panel-col-first div.views-field-field-phone-value {margin:0 0 3px;}
+div#communityDetail div.panel-col-first div.views-field-body {margin:10px 0;}
+div#communityDetail div.center-wrapper div.panel-col-last {float:left; width:49%; margin:0 0 0 1%;}
+div#communityDetail div.communityPicture {overflow:hidden;}
+div#communityDetail div.horizontal-grid-by-3 {float:left; width:31%; margin:0 1%;}
+div#communityDetail div.horizontal-grid-by-3 h2 {font-size:1em; color:#666;}
+
+
+/* Sales Locations */
+div#saleslocationsDetail {width:100%;}
+div#saleslocationsDetail div.center-wrapper div.panel-col-first {float:left; width:50%;}
+div#saleslocationsDetail div.center-wrapper div.panel-col-first label {font-weight:700;}
+div#saleslocationsDetail div.panel-col-first div.views-field-address {margin:0 0 5px;}
+div#saleslocationsDetail div.panel-col-first div.views-field-field-email-value, div#saleslocationsDetail div.panel-col-first div.views-field-field-fax-value, div#saleslocationsDetail div.panel-col-first div.views-field-field-email-address-email {margin:0 0 10px;}
+div#saleslocationsDetail div.panel-col-first div.views-field-field-phone-value {margin:0 0 3px;}
+div#saleslocationsDetail div.panel-col-first div.views-field-body {margin:10px 0;}
+div#saleslocationsDetail div.center-wrapper div.panel-col-last {float:left; width:49%; margin:0 0 0 1%;}
+div#saleslocationsDetail div.saleslocationPicture {overflow:hidden;}
+div#saleslocationsDetail div.horizontal-grid-by-2 {float:left; width:47%; margin:0 1%;}
+div#saleslocationsDetail div.horizontal-grid-by-2 h2 {font-size:1em; color:#666;}
+div#saleslocationsDetail div.panel-col-bottom div.panel-separator {display:none;}
+
+
+/* Community and Locations Map Pin Pop-Ups */
+div#mapWithSinglePin label {font-weight:700;}
+div#mapWithSinglePin div.views-field-name, div#mapWithSinglePin div.views-field-title {font-size:1.2em; font-weight:700; color:#156C35;}
+div#mapWithSinglePin div.views-field-address, div#mapWithSinglePin div.views-field-field-phone-value {margin-bottom:5px;}
+div#mapWithSinglePin div.views-field-field-office-hours-value {font-weight:700;}
+div#mapWithSinglePin div.views-field-field-website-url {margin:5px 0;}
+div#mapWithSinglePin div.country-name {display:none;}
+
+
+/* Job Positions Index */
+div#listAllCommunities {margin:10px 0;}
+div#listAllCommunities div.views-field-field-community-image-fid {float:right; padding:5px;}
+div#listAllCommunities div.view-content ul li {float:left; list-style:none; margin:0 0 15px !important; padding:0; clear:left;}
+
+
+/* Our Communities */
+div#currentJobPositions {margin:10px 0;}
+div#currentJobPositions div.content  {width:575px; margin:0 auto; padding:5px;}
+div#currentJobPositions div.view-content ul li {float:left; list-style:none; margin:0 0 15px !important; padding:0; clear:left;}
+div#currentJobPositions div.view-content div.views-field-teaser, div#currentJobPositions div.views-field-teaser p {margin:3px 0;}
+div#currentJobPositions div.view-content div.views-field-field-date-value {float:left; margin-left:5px; clear:left;}
+div#currentJobPositions div.view-content div.views-field-field-date-value label {float:left; width:auto; margin-right:5px; color:#999;}
+
+/* Pager */
+div.item-list ul.pager {float:left; clear:both; width:99%; margin:0 auto;}
+div.item-list ul.pager li {float:left; margin:0 5px !important; padding:0;}
+div.item-list ul.pager li a:link, div.item-list ul.pager li a:visited {padding:0 3px;}
+div.item-list ul.pager li.pager-current {color:#ccc; text-decoration:underline;}
+div.item-list ul.pager li.pager-next, div.item-list ul.pager li.pager-first {margin-right:0 !important;}
+div.item-list ul.pager li.pager-previous, div.item-list ul.pager li.pager-last {margin-left:0 !important;}
+
+/* Contact Information Form (Job Application) */
+div#contactInformationForm {margin:0 auto; padding:0; width:525px; overflow:hidden;}
+div#contactInformationForm div.webform-component-textfield {width:525px; clear:left;}
+div#contactInformationForm div#webform-component-sales_location_desired label {float:left; margin-right:10px;}
+div#contactInformationForm div#webform-component-sales_location_desired select {width:242px;}
+div#contactInformationForm div#webform-component-city, div#contactInformationForm div#webform-component-zip_code {float:left; width:125px; margin:0 5px 0 0; clear:none;}
+div#contactInformationForm div#webform-component-state {float:left; width:125px; margin:0 5px 0 2px;}
+div#contactInformationForm div#webform-component-city input, div#contactInformationForm div#webform-component-zip_code input {width:120px;}
+div#contactInformationForm div#webform-component-state select {width:123px; padding:1px 0;}
+div#contactInformationForm div#webform-component-phone {clear:left;}
+div#contactInformationForm fieldset#webform-component-resume {margin:0 0 10px;}
+div#contactInformationForm fieldset#webform-component-resume a {outline:none;}
+
+/* Financing Calculator */
+form#webform-client-form-101 div#webform-component-sched label {display:none;}
+form#webform-client-form-101 div#webform-component-sched {display:none;}
+
+/* Pre-Qualification Form */
+form#webform-client-form-45-1 fieldset {border:1px solid #94CA96; padding:10px; margin-bottom:10px;}
+form#webform-client-form-45-1 fieldset legend {font-size:1.1em; font-weight:700;}
+form#webform-client-form-45-1 fieldset fieldset {border-color:#ccc !important; padding:5px !important;}
+form#webform-client-form-45-1 fieldset fieldset legend {font-size:1em;}
+form#webform-client-form-45-1 fieldset fieldset fieldset {border:none !important; padding:0 !important;}
+
+form#webform-client-form-45-1 fieldset#webform-component-monthly_obligations {clear:left;}
+form#webform-client-form-45-1 fieldset#webform-component-weekly_amount {float:left; margin-left:30px;}
+form#webform-client-form-45-1 fieldset#webform-component-monthly_amount {float:left; margin-left:30px;}
+form#webform-client-form-45-1 fieldset#webform-component-comment {float:left; margin-left:30px;}
+form#webform-client-form-45-1 div#webform-component-total_monthly_gross_income label {float:left; margin-right:10px;}
+form#webform-client-form-45-1 div#webform-component-total_monthly_gross_income input {float:left;}
+
+form#webform-client-form-45-1 div#webform-component-total_amount_available_for_monthly_obligation span.field-suffix, form#webform-client-form-45-1 div#webform-component-maximum_amount_available_for_housing span.field-suffix, form#webform-client-form-45-1 div#webform-component-monthly_lot_rent span.field-suffix, form#webform-client-form-45-1 div#webform-component-net_amount_available_for_house_payment span.field-suffix {float:left; clear:both;}
+
+form#webform-client-form-45-1 div#webform-component-maximum_amount_available_for_housing, form#webform-client-form-45-1 div#webform-component-monthly_lot_rent, div#webform-component-net_amount_available_for_house_payment, form#webform-client-form-45-1 div#webform-component-amount_desired_for_monthly_home_investment {clear:left; margin-top:5px; overflow:hidden;}
+
+/*****************
+* Footer
+*****************/
+
+/* Follow Us */
+div#block-block-18 {margin:10px 0;}
+
+div#footer {background:transparent url(./images/layout/footerBottomBackground.gif) bottom center no-repeat; width:886px; margin:0 auto; padding:0 4px 6px; clear:both;}
+div#footer div.footerContent {width:874px; padding:5px 5px 0 0; margin:0 1px; color:#fff; background:#1F6C3E; overflow:hidden;}
+div#footer a:link, div#footer a:visited {color:#fff; text-decoration:underline; font-size:.9em;}
+div#footer div.block {float:left;}
+div#footer div#block-block-2 {padding-left:5px;}
+div#footer div#block-block-12 {width:225px;}
+div#footer div#block-menu_block-1 {width:649px;}
+div#footer div#block-menu_block-1 li {float:left; list-style:none; border-right:1px solid #fff; padding-right:10px; margin-left:10px; line-height:12px;}
+div#footer div#block-menu_block-1 li.last {border-right:none;}
+div#footer div#block-block-5 {float:left; padding:0; margin:0; clear:left; overflow:hidden;}
+div#footer div#block-block-5 span {float:left; line-height:0;}
+div#footer div#block-block-5 p {margin-bottom:0;}
+div#footer div#block-block-5 a:link, div#footer div#block-block-5 a:visited {text-decoration:none; outline:none;}
+div#footer div#block-block-6 {float:left; margin:-20px 0 0 118px; width:600px; clear:left;}
+div#footer div#block-block-6 li {list-style:none; float:left; margin-right:10px;}
+div#footer div#block-views-homes-block_1 {float:left; width:670px; margin:0 0 -40px 115px;}
+div#footer div#block-views-homes-block_1 table.views-view-grid td {padding:2px 15px;}
+div#footer div#block-block-13 {float:left; width:99%; clear:left;}
+div#footer div#block-block-13 ul {overflow:hidden; margin:0; padding:0;}
+div#footer div#block-block-13 li {list-style:none; float:left; margin-right:10px;}
+
+
+/* Inclind */
+div#inclind {width:884px; margin:0 auto; padding:3px 10px 10px 0; text-align:right;}
+
+
+/*****************
+* CAPTCHA
+*****************/
+div.captcha {margin:10px 5px; float:left;}
+div.captcha div {font-weight:700; border:1px solid #ccc; padding:5px;}
+div.captcha div#edit-captcha-response-wrapper {font-weight:100; font-size:1em; border:none;}
+div.captcha div.description {position:relative;}
+div.captcha div#edit-captcha-response-wrapper div, div.captcha div div {border:none !important; padding:0;}
+div#edit-submit-1 {clear:left;}
+
+/*table#recaptcha_table {border:none !important;}
+div#block-nodeasblock-435 div#recaptcha_area {float:left; width:215px !important; overflow:hidden;}
+div#block-nodeasblock-435 table#recaptcha_table {width:260px !important;}
+div#block-nodeasblock-435 td.recaptcha_image_cell {float:left; width:160px !important; padding:0 !important; margin:0 !important; clear:both !important;}
+div#block-nodeasblock-435 div#recaptcha_image {float:left; width:160px !important; padding:0; margin:0; border:1px solid #2F3C77 !important;}
+div#block-nodeasblock-435 div#recaptcha_image img {float:left; width:75% !important;}
+div#block-nodeasblock-435 input#recaptcha_response_field {width:140px !important;}
+div#block-nodeasblock-435 div#recaptcha_image img {width:148px !important;}
+div#block-nodeasblock-435 div#recaptcha_image center {width:150px !important;}
+div#block-nodeasblock-435 img#recaptcha_logo, div#block-nodeasblock-435 img#recaptcha_tagline {display:none;}*/
+
+/*****************
+* gTranslate
+*****************/
+div.block-gtranslate {text-align:right; padding:3px 12px 0 0; overflow:hidden;}
+div.block-gtranslate h3 {font-size:.8em; font-weight:700; color:#ccc;}
+
+
+/*****************
+* MISC
+*****************/
+.clearBoth {clear:both; line-height:0;}
+.alert {font-size:.8em; color:#F00; clear:both;}
+
+

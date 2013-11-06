@@ -1,0 +1,147 @@
+<?php
+/* $Id: inclind_error.module,v 1.0 2008/12/22 12:30:00 kevin@inclind.com Exp $ */
+
+/**
+ * @file
+ * Inclind Error: Creates a node on critical errors with full system/session/event dumps. */
+
+function inclind_error_watchdog_insert($type, $message, $severity, $link, $log_message) {
+	/*
+	if ($severity) {
+		
+		if ( strlen($site_name) ) {
+			$company = check_plain($site_name);
+		} else {
+			$company = $_SERVER['SERVER_NAME'];
+		}
+
+		$website = $log_message['request_uri'];
+		global $user;
+		
+		$now = time();
+		
+		$body = $log_message['variables']['%message'];
+		$line = $log_message['variables']['%line'];
+		$file = $log_message['variables']['%file'];
+		
+		ob_start();
+		
+		new dBug($_SERVER);
+		new dBug($_GET);
+		new dBug($_POST);
+		new dBug($_COOKIE);
+		new dBug($_SESSION);
+		new dBug($_REQUEST);
+		new dBug($user);
+		
+		$dump = ob_get_contents();
+		$dump = addslashes($dump);
+		
+		ob_end_clean();
+		
+		
+			$newNodeNID = db_query('SELECT max(nid) FROM node LIMIT 1');
+			$newNodeNID = db_result($newNodeNID);
+			$newNodeNID++;
+			
+			$newNodeVID = db_query('SELECT max(vid) FROM node_revisions');
+			$newNodeVID = db_result($newNodeVID);
+			$newNodeVID++;
+			
+			$nodeCreate = 'INSERT INTO node
+								(nid,
+								vid,
+								type,
+								language,
+								title,
+								uid,
+								status,
+								created,
+								changed,
+								comment,
+								promote,
+								moderate,
+								sticky,
+								tnid,
+								translate)
+							VALUES (
+								'.$newNodeNID.',
+								'.$newNodeVID.',
+								"error",
+								"",
+								"'.$company.'",
+								1,
+								1,
+								'.$now.',
+								'.$now.',
+								1,
+								0,
+								0,
+								0,
+								0,
+								0
+							)';
+			
+				db_query($nodeCreate);
+						
+			$nodeRevisionCreate = 'INSERT INTO node_revisions
+									(nid,
+									vid,
+									uid,
+									title,
+									body,
+									teaser,
+									log,
+									timestamp,
+									format)
+								VALUES (
+									'.$newNodeNID.',
+									'.$newNodeVID.',
+									1,
+									"'.$company.'",
+									"'.$body.'",
+									"",
+									"",
+									'.$now.',
+									2)';
+									
+				db_query($nodeRevisionCreate);
+				
+			$nodeCommentStatisticsCreate = 'INSERT INTO node_comment_statistics
+									(nid,
+									last_comment_timestamp,
+									last_comment_name,
+									last_comment_uid,
+									comment_count)
+								VALUES (
+									'.$newNodeNID.',
+									'.$now.',
+									NULL,
+									1,
+									0)';
+									
+				db_query($nodeCommentStatisticsCreate);
+				
+			$nodeErrorCreate = 'INSERT INTO content_type_error
+									(vid,
+									nid,
+									field_company_value,
+									field_website_value,
+									field_errortype_value,
+									field_line_value,
+									field_file_value,
+									field_dump_value)
+								VALUES (
+									'.$newNodeVID.',
+									'.$newNodeNID.',
+									"'.$company.'",
+									"'.$website.'",
+									"'.$type.'",
+									"'.$line.'",
+									"'.$file.'",
+									"'.$dump.'")';
+									
+				db_query($nodeErrorCreate);
+							
+	}	*/			
+}

@@ -1,0 +1,6 @@
+# Ignore paths that contain user-generated content.
+files
+sites/*/files
+sites/*/_files
+sites/*/private
+

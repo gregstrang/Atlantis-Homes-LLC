@@ -1,0 +1,145 @@
+<?php
+// $Id: inclind_banner.module,v 1.0 2009/01/27 14:19:15 kquillen Exp $
+
+
+/**
+ * Implementation of hook_form_alter().
+ */
+ 
+function inclind_banner_form_alter(&$form, &$form_state, $form_id) {
+	if ((preg_match('/block_admin_configure/', $form_id) || preg_match('/block_add_block_form/', $form_id)) && !preg_match('/delete/', $form_id)) { 
+		 
+		  if (!is_array($form['#submit'])) 
+				$form['#submit'] = array();
+				$form['#submit'][] = 'inclind_banner_node_form_submit';
+		  
+		  $tree = taxonomy_get_tree(_image_gallery_get_vid());
+		  $options[0] = 'Select a gallery...';
+		  
+		  if ($tree) {
+			foreach ($tree as $term) {
+			  $options[$term->tid] = str_repeat(' -- ', $term->depth) .' '. $term->name;
+			}
+		  }
+		  else {
+			$options = array('0' => 'No Image Galleries Available');
+		  }
+		  
+		  if ($form_id == 'block_admin_configure' && is_numeric(arg(5))) {
+		  	// isolate the saved TID if any
+			$query = 'SELECT body FROM {boxes} WHERE bid = '.arg(5).' AND format = 3';
+			$result = db_query($query);
+			if (count($result)) {
+				$result = db_fetch_array($result);
+				$phpBody = $result['body'];
+				$phpBody = str_replace('<?php echo image_cycle_show(', '', $phpBody);
+				$phpBody = str_replace('); ?>', '', $phpBody);
+				$optionTID = $phpBody;
+				if (is_numeric($phpBody)) {
+					$form['block_settings']['body_field']['body']['#description'] = '';
+					$form['block_settings']['body_field']['body']['#title'] = '';
+					$form['block_settings']['body_field']['body']['#attributes'] = array('readonly' => 'readonly', 'style' => 'display: none', 'class' => '');
+					$form['block_settings']['body_field']['format']['#attributes'] = array('style' => 'display: none');
+				}
+			}
+
+			if (is_numeric($optionTID)) {
+				$defaultValue = $optionTID;
+			} else {
+				$defaultValue = 0; 
+			}
+			
+		}
+		 
+		 if ($form_id == 'block_add_block_form' || (($form_id == 'block_admin_configure') && (is_numeric(arg(5)) && (arg(4) == 'block')))) {
+		 	if (is_numeric(arg(5)) || (arg(3) == 'add')) {
+				  $form['block_settings']['gallery_options'] = array(
+					'#type' => 'select',
+					'#title' => 'Embed Banner Gallery',
+					'#default_value' => $defaultValue,
+					'#description' => 'If you want this block to display rotating banners, select an available image gallery. Do not place anything in the body field below if you select a gallery.',
+					'#weight' => -17,
+					'#options' => $options,
+				  );
+			  }
+		  
+		  }
+	  
+	}
+}
+
+function inclind_banner_node_form_submit($form, &$form_state) {
+		
+	if ($form_state['values']['form_id'] == 'block_add_block_form') {
+		
+		$lastCreatedBlockID = db_last_insert_id('blocks', 'bid');
+		
+		$query = 'SELECT delta FROM blocks WHERE module = "block" AND bid = '.$lastCreatedBlockID.'';
+		$result = db_query($query);
+		$delta = db_fetch_array($result);
+		$delta = $delta['delta'];
+	
+		// if value isnt 0, user selected a gallery, so lets put in the php code
+		
+		if (is_numeric($delta)) {
+			if ($form['block_settings']['gallery_options']['#value'] != 0)  {
+				$edit['info'] = $form['block_settings']['#post']['info'];
+				$edit['format'] = 3;
+				$edit['body'] = '<?php echo image_cycle_show('.$form['block_settings']['gallery_options']['#value'].'); ?>';
+				
+				block_box_save($edit, $delta);
+			}
+		}
+	
+	} elseif ($form_state['values']['form_id'] == 'block_admin_configure' && is_numeric(arg(5))) {
+		$query = 'SELECT bid FROM {boxes} WHERE bid = '.arg(5).'';
+		$result = db_query($query);
+		$delta = db_fetch_array($result);
+		$delta = $delta['bid'];
+	
+		// if value isnt 0, user selected a gallery, so lets put in the php code
+		if (is_numeric($delta)) { 
+			
+			if ($form['block_settings']['gallery_options']['#value'] != 0)  {
+				$edit['info'] = $form['block_settings']['#post']['info'];
+				$edit['format'] = 3;
+				$edit['body'] = '<?php echo image_cycle_show('.$form['block_settings']['gallery_options']['#value'].'); ?>';
+				block_box_save($edit, $delta);
+			} elseif ($form['block_settings']['gallery_options']['#value'] == 0 && $form['block_settings']['body_field']['format'] == 3 && preg_match('/image_cycle_show/', $form['block_settings']['body_field']['body']['#value'])) { 
+				// reset the block. they had a gallery here before, but have now removed the gallery.
+				$edit['info'] = $form['block_settings']['#post']['info'];
+				$edit['format'] = 2;
+				$edit['body'] = '';
+				block_box_save($edit, $delta);
+			}
+			
+			
+		}
+	}
+	
+	return;
+}
+
+// the following is a copy from image.module so we can use the original sizes for banner galleries in a teaser view. if the banner is only using .preview files, you must change the function name from image_display to inclind_banner_image_display in image_cycle in the theme_image_cycle function
+
+function inclind_banner_image_display(&$node, $label = IMAGE_ORIGINAL, $attributes = array()) {
+ 
+	foreach ($node->taxonomy as $term) {
+		$topLevelTID = taxonomy_get_parents_all($term->tid);
+		$topLevelTID = $topLevelTID[count($topLevelTID) - 1];
+		$parentName = $topLevelTID->name;
+	}
+	
+	if ($parentName != 'Banners'):
+		$label = IMAGE_PREVIEW; endif;
+   
+	if (empty($node->images[$label])):
+		return; endif;
+
+  $image_info = image_get_info(file_create_path($node->images[$label]));
+  $attributes['class'] = "image image-$label ". (isset($attributes['class']) ? $attributes['class'] : "");
+  $attributes['width'] = $image_info['width'];
+  $attributes['height'] = $image_info['height'];
+
+  return theme('image_display', $node, $label, file_create_url($node->images[$label]), $attributes);
+}

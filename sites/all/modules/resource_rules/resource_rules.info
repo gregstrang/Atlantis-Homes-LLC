@@ -1,0 +1,11 @@
+; $Id: sections.info,v 1.3.2.2 2007/11/17 20:49:40 hass Exp $
+name = Resource Rules
+description = "Specify ruels about when CSS or JS files do/do not get added to a particular page.
+core = 6.x
+package = "Inclind"
+
+version = "6.x-1.0"
+core = "6.x"
+project = "inclind"
+datestamp = "1212427216"
+

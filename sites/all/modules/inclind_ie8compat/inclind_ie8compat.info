@@ -1,0 +1,10 @@
+; $Id: inclind_ie8compat.info,v 1.0 2009/01/30 12:00:00 kquillen Exp $
+name = Inclind IE 8 Compatibility
+description = Adds the new IE8 meta tag to the site header so it renders the site as if it were IE7.
+core = 6.x
+package = Inclind
+
+; Information added by drupal.org packaging script on 2009/01/30
+version = "6.x-1.0"
+core = "6.x"
+datestamp = "1232380892"

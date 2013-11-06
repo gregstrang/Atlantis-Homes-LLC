@@ -1,0 +1,7 @@
+$Id: CHANGELOG,v 1.1.2.1 2009/12/30 12:30:26 edo888 Exp $
+
+23 Nov. 2009:
+Completely new module with new features for Drupal 6.x
+
+30 Dec. 2010:
+Fixed path for flags: base_path() . drupal_get_path('module', 'gtranslate')

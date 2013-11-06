@@ -1,0 +1,55 @@
+<?php
+// $Id: inclind_sitemap.module,v 1.0 2009/01/30 12:00:00 kquillen Exp $
+
+/**
+ * @file
+ * Creates a sitemap.xml file for search engines.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+
+function inclind_sitemap_menu() {
+  $items = array();
+  $items['sitemap'] = array(
+    'title' => 'XML Sitemap',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'page callback' => 'inclind_sitemap'
+  );
+  return $items;
+}
+
+/*
+*
+*	Generate Sitemap on request
+*
+*/
+
+function inclind_sitemap() {
+  $base = ($_SERVER['HTTPS'] ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . base_path();
+  $urls = array();
+  $result = db_query("SELECT ua.dst, n.changed FROM {node} n INNER JOIN {url_alias} ua ON ua.src = CONCAT( 'node/', n.nid ) WHERE n.status =1 ORDER BY n.changed DESC");
+
+ while($r = db_fetch_object($result)) {
+    if ($r->dst != 404 && $r->dst != 403) {
+      $urls[$base . $r->dst] = $r->changed;
+    }
+  }
+ 
+  header('Content-Type: text/xml');
+	 $xml =	'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+	
+	  foreach ($urls as $url => $t) {
+		$xml .= "<url>\n";
+		$xml .= "<loc>" . $url . "</loc>\n";
+		$xml .= "<changefreq>daily</changefreq>";
+		$xml .= "<priority>0.5</priority>";
+		$xml .= "<lastmod>" . date("Y-m-d", $t) . "</lastmod>\n";
+		$xml .= "</url>\n";
+	  }
+	  $xml .= "</urlset>";
+	  print $xml;
+	  exit();
+}

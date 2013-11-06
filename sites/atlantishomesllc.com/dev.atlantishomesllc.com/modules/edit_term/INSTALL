@@ -1,0 +1,26 @@
+Instructions on how to install and configure the edit term module 
+f Drupal 5:
+
+INSTALLATION:
+
+Step 0)
+  Have a working installation of Drupal.  See http://drupal.org/project/drupal
+
+Step 1)
+  Copy the 'edit_term.module', 'edit_term.install', and
+'edit_term.info' files within their 'taxonomy_install' subdirectory 
+into your 'modules', 'sites/all/modules', or site-specific modules directory.
+  Drupal ninjas can automate installation with http://drupal.org/project/drush
+
+Step 2)
+  Enable the edit_term module.  
+  Go to "Administer >> Build >> Modules" and put a checkmark in the 'status' 
+column next to 'edit_term'. 
+
+Step 3)
+  Check new functionality. When viewing a term (on a taxonomy/term/edit page)
+  you should see a new option in the tabs: 'Edit Term' (or Gallery) which will
+  link directly to an equivalent of the the admin/content/taxonomy/edit/term/n
+  interface.
+  On that page you will also see edit fields for aliases and menu creation to
+  represent a term view.

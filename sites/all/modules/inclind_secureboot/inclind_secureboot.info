@@ -1,0 +1,10 @@
+; $Id: inclind_secureboot.info,v 1.0 2009/02/01 12:00:00 kquillen Exp $
+name = Inclind Secureboot
+description = Helps Admin Menu render after logging in through SecureSite.
+core = 6.x
+package = Inclind
+
+; Information added by drupal.org packaging script on 2009/02/01
+version = "6.x-1.0"
+core = "6.x"
+datestamp = "1232380892"

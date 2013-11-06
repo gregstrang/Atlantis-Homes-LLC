@@ -1,0 +1,13 @@
+; $Id: boost.info,v 1.1.2.1.2.3.2.1 2008/10/24 23:10:23 arto Exp $
+name = Smart Boost
+description = Adds some smarter caching options to the Boost module
+package = Caching
+dependencies[] = boost
+core = 6.x
+
+; Information added by drupal.org packaging script on 2008-10-25
+version = "6.x-1.0"
+core = "6.x"
+project = "smartboost"
+datestamp = "1224952504"
+

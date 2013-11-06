@@ -1,0 +1,74 @@
+<?php
+// $Id: inclind_node.module,v 1.34.2.1 2008/11/05 14:19:15 kquillen Exp $
+
+/*
+*
+*	Master module for controlling form display, values, and verbiage.
+*
+*/
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function inclind_node_form_alter(&$form, &$form_state, $form_id) {
+	
+	if (preg_match('/views_exposed_form/', $form_id) && preg_match('/dogfish-map.htm/', $_SERVER['QUERY_STRING'])) {
+		unset($form['country']['#options']);
+		$form['country']['#options'] = array('All' => '', 'us' => 'United States', 'ca' => 'Canada');
+	}
+ 		
+	if (preg_match('/user_register/', $form_id)) {
+		$form['name']['#description'] = "Spaces are allowed; punctuation is not allowed except for periods and hyphens. Offensive words are not allowed. To see if a username is available, type it into the box and wait.";
+		$form['mail']['#description'] = "A valid e-mail address. A verification email (and all communication from dogfish.com) will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.";
+	}
+
+	/*if (preg_match('/node_form/', $form_id) && (arg(1) == 'add' || arg(2) == 'edit')) {
+		
+		$form['body_field']['format']['#attributes'] = array("style" => "display: none");
+		$form['author']['#attributes'] = array("style" => "display: none");
+		$form['xmlsitemap_node']['#attributes'] = array("style" => "display: none");
+		$form['revision_information']['#attributes'] = array("style" => "display: none");
+		
+		$form['options']['promote']['#attributes'] = array("style" => "display: none");
+		$form['options']['sticky']['#attributes'] = array("style" => "display: none");
+		$form['options']['revision']['#attributes'] = array("style" => "display: none");
+		$form['options']['promote']['#title'] = '';
+		$form['options']['sticky']['#title'] = '';
+		$form['options']['revision']['#title'] = '';
+		$form['domain']['domain_site']['#description'] = 'Select Atlantis Homes LLC., Cool Branch and/or Jefferson Crossroads below.';
+		$form['domain']['domain_site']['#title'] = '';
+		$form['domain']['domain_site']['#prefix'] = '';
+		$form['domain']['domain_site']['#default_value'] = '0';		
+		$form['domain']['domain_site']['#attributes'] = array("disabled" => "disabled", "style" => "display:none;");
+	}*/
+	
+	/*if (preg_match('/node_form/', $form_id) && arg(2) == 'edit') {
+		
+		$form['body_field']['format']['#attributes'] = array("style" => "display: none");
+		$form['author']['#attributes'] = array("style" => "display: none");
+		$form['xmlsitemap_node']['#attributes'] = array("style" => "display: none");
+		$form['revision_information']['#attributes'] = array("style" => "display: none");
+		
+		$form['options']['promote']['#attributes'] = array("style" => "display: none");
+		$form['options']['sticky']['#attributes'] = array("style" => "display: none");
+		$form['options']['revision']['#attributes'] = array("style" => "display: none");
+		$form['options']['promote']['#title'] = '';
+		$form['options']['sticky']['#title'] = '';
+		$form['options']['revision']['#title'] = '';	
+		
+	}
+		
+	if ($form_id == 'forum_node_form') {
+		$form['attachments']['#type'] = "hidden";
+		$form['attachments']['#access'] = FALSE;
+		
+		$form['options']['promote']['#type'] = 'hidden';
+		$form['options']['sticky']['#type'] = 'hidden';
+		$form['options']['revision']['#type'] = 'hidden';
+		
+		$form['options']['promote']['#default_value'] = FALSE;
+		$form['options']['sticky']['#default_value'] = FALSE;
+		$form['options']['revision']['#default_value'] = FALSE;
+	}*/
+	
+}

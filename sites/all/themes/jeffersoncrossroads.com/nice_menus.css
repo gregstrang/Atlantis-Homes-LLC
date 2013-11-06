@@ -1,0 +1,60 @@
+/******************************
+ Global CSS for ALL menu types
+******************************/
+
+/* Standard Layout */
+ul.nice-menu, ul.nice-menu ul {list-style: none; padding: 0; margin: 0;}
+ul.nice-menu li {float: left; background-color:#eee;}
+ul.nice-menu a {padding: 0.3em 5px 0.3em 5px; font-size:1em; outline:none;}
+ul.nice-menu ul {top: 2.1em; left: -2px; border: 0; margin-right: 0;}
+ul.nice-menu ul li {width: 15em;}
+
+
+
+/******************************
+ VERTICAL (left/right) menus
+******************************/
+
+/* This is the default width of all vertical menus. */
+ul.nice-menu-right, ul.nice-menu-left, ul.nice-menu-right li, ul.nice-menu-left li { width: 12.5em; }
+/* VERTICAL menus where submenus pop RIGHT (default). */
+ul.nice-menu-right ul { width: 12.5em; left: 12.5em; top: -1px; }
+ul.nice-menu-right ul ul { width: 12.5em; left: 12.5em; top: -1px; }
+ul.nice-menu-right li.menuparent, ul.nice-menu-right li li.menuparent { background: #eee url(arrow-right.png) right center no-repeat; }
+ul.nice-menu-right li.menuparent:hover, ul.nice-menu-right li.over, ul.nice-menu-right li li.menuparent:hover, ul.nice-menu-right li li.over { background: #ccc url(arrow-right.png) right center no-repeat; }
+/* VERTICAL menus where submenus pop LEFT. */
+ul.nice-menu-left li ul { width: 12.5em; left: -12.65em; top: -1px; }
+ul.nice-menu-left li ul li ul { width: 12.5em; left: -12.65em; top: -1px; }
+ul.nice-menu-left li.menuparent, ul.nice-menu-left li li.menuparent { background: #eee url(arrow-left.png) left center no-repeat; }
+ul.nice-menu-left li.menuparent:hover, ul.nice-menu-left li.over, ul.nice-menu-left li li.menuparent:hover, ul.nice-menu-left li li.over { background: #ccc url(arrow-left.png) left center no-repeat; }
+ul.nice-menu-left a, ul.nice-menu-left ul a { padding-left: 14px; }
+
+
+
+/******************************
+ HORIZONTAL (down) menus
+ ** Colors for horizontal are found in nice_menu_colors.css
+******************************/
+
+/* Container Layout */
+div#nav {float:left; width:635px; height:91px; font-size:1.1em;}
+div#nav div.block-nice_menus {float:right; margin-top:59px;}
+
+ul.nice-menu-down {float: left; border: 0;}
+ul.nice-menu-down li {margin:0 10px 0 0; border-width: 1px 1px 0; border-style:solid;}
+
+/* Primary Anchors */
+ul.nice-menu-down li a:link, ul.nice-menu-down li a:visited {padding:8px 10px 2px; font-weight:700; text-decoration:none;  border-width: 3px 3px 2px; border-style:solid;}
+
+/* Secondary Anchors */
+ul.nice-menu-down li ul li a:link, ul.nice-menu-down li ul li a:visited {padding:8px 0 8px 10px; font-weight:700; text-decoration:none; color:#126932; border:none;}
+ul.nice-menu-down li ul li a:hover, ul.nice-menu-down li ul li a:active {border:none;}
+
+ul.nice-menu-down li ul {left: -1px; top:30px; width:15em;}
+ul.nice-menu-down li ul li {border-width: 0 1px 1px;}
+ul.nice-menu-down li ul li ul {left: 15em; top: -1px;}
+ul.nice-menu-down .menuparent a {}
+ul.nice-menu-down li.menuparent {}
+ul.nice-menu-down li.menuparent:hover, ul.nice-menu-down li.over {}
+ul.nice-menu-down li li.menuparent {}
+ul.nice-menu-down li li.menuparent:hover, ul.nice-menu-down li li.over {}

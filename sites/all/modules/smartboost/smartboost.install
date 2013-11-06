@@ -1,0 +1,32 @@
+<?php
+// $Id: smartboost.install,v 1.2.2.1.2.3.2.4 2008/10/25 15:16:21 arto Exp $
+
+
+/**
+ * Implementation of hook_install().
+ */
+function smartboost_install() {
+  // Ensure that the module is loaded early in the bootstrap:
+  db_query("UPDATE {system} SET weight = -95 WHERE name = '%s'", 'smartboost');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function smartboost_uninstall() {
+  db_query("DELETE FROM {variable} WHERE name LIKE '%s_%%'", 'smartboost');
+  cache_clear_all('variables', 'cache');
+}
+
+/**
+ * Implementation of hook_requirements().
+ */
+function smartboost_requirements($phase) {
+  $status = array();
+
+  if ($phase == 'runtime') {
+    // TODO: check that the smartboost-specific .htaccess modifications are correctly installed.
+  }
+
+  return $status;
+}

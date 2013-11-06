@@ -1,0 +1,91 @@
+<?php
+/* $Id: inclind_pathauto.module,v 1.0 2008/11/13 12:30:00 kevin@inclind.com Exp $ */
+
+/**
+ * @file
+ * Inclind Pathauto: Stop Pathauto from aliasing everything on node edit. Modified to accomodate the Domain Prefix module for URL table prefixing so each site can have duplicate urls, and keeps the Menu table up to date when a new alias is created for an existing menu item record */
+function inclind_pathauto_form_alter(&$form, $form_state, $form_id) {
+
+	if ($form['form_id']['#value'] == "menu_edit_item_form") {
+		if (preg_match('/node\//i', $form['path']['#default_value'])) {
+			$node_id = $form['path']['#default_value'];
+			$node_id = preg_replace('/node\//i', '', $node_id);
+
+			if (is_numeric($node_id)) {
+				$node = node_load($node_id, NULL, true);
+				if (strlen($node->path))
+					$form['path']['#default_value'] = $node->path;
+			}
+		}
+	}
+
+	if (!is_array($form['#submit'])) 
+		$form['#submit'] = array();
+		$form['#submit'][] = 'inclind_pathauto_node_form_submit';
+
+	if (preg_match('/node_form/', $form_id) && arg(2) == 'edit') {
+		if (isset($form['#node'])) {
+			$form['path']['#required'] = FALSE;
+			
+			if (strlen($form['path']['path']['#default_value'])) {
+				$form['path']['pathauto_perform_alias']['#default_value'] = FALSE;
+			}
+			
+		}	
+	}
+	
+}
+
+function inclind_pathauto_node_form_submit($form, &$form_state) {
+	global $_inclind_pathauto_active_nid;
+
+
+	if (preg_match('/menu-overview/', $form['form_id']['#id'])) {
+		$order = array_flip(array_keys($form['#post'])); // Get the $_POST order.
+		$form = array_merge($order, $form); // Update our original form with the new order.
+		
+		$updated_items = array();
+		$fields = array('expanded', 'weight', 'plid');
+		foreach (element_children($form) as $mlid) {
+			if (isset($form[$mlid]['#item'])) {
+			  $element = $form[$mlid];
+			  // Update any fields that have changed in this menu item.
+			  foreach ($fields as $field) {
+				if ($element[$field]['#value'] != $element[$field]['#default_value']) {
+				  $element['#item'][$field] = $element[$field]['#value'];
+				  $updated_items[$mlid] = $element['#item'];
+				}
+			  }
+						  
+			  // Hidden is a special case, the value needs to be reversed.
+			  if ($element['hidden']['#value'] != $element['hidden']['#default_value']) {
+				$element['#item']['hidden'] = !$element['hidden']['#value'];
+				$updated_items[$mlid] = $element['#item'];
+			  }
+			}
+		}
+		
+		// Save all our changed items to the database.
+		foreach ($updated_items as $item) {
+			$item['customized'] = 1;
+			
+		    if (preg_match('/node/', $item['link_path'])) {
+				$nid = str_ireplace("node/", "", $item['link_path']);
+			}
+			
+			if ($nid > 0) {
+				$nodes[] = $nid;
+			}
+			
+			//menu_link_save($item);
+		}
+				
+		if (count($nodes) > 0) {
+			pathauto_node_operations_update($nodes);
+		}
+	}
+	
+	
+	return;
+}
+

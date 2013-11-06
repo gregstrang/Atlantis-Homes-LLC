@@ -1,0 +1,14 @@
+; $Id: ctm.info,v 1.1 2008/11/24 13:03:57 vasike Exp $
+name = "Inclind Error"
+description = "Inclind error checking and reporting"
+package = "Inclind"
+core = 6.x
+project = "inclind_error"
+
+
+; Information added by drupal.org packaging script on 2008-11-24
+version = "6.x-1.0"
+core = "6.x"
+project = "inclind_error"
+datestamp = "1227532508"
+

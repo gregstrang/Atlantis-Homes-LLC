@@ -1,0 +1,99 @@
+<?php
+/* $Id: resource_rules.install,v 1.10.2.6 2008/06/01 13:12:32 hass Exp $ */
+
+function resource_rules_install() {
+  drupal_install_schema('resource_rules');
+
+  // Set modul weight to negative value to be the first called.
+  db_query("UPDATE {system} SET weight = '-10' WHERE name = 'resource_rules'");
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function resource_rules_uninstall() {
+  drupal_uninstall_schema('resource_rules');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function resource_rules_schema() {
+  $schema['resource_rules_data'] = array(
+    'description' => t('Stores Resource Rules settings.'),
+    'fields' => array(
+      'sid' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => t('Primary Key: Unique resource rules ID.'),
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => t('The name of this module.'),
+      ),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+        'description' => t('Module rule enabled status. (1 = enabled, 0 = disabled)'),
+      ),
+      'path' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'description' => t('Internal path or URL alias with or without placeholders this rule will apply (relative to Drupal root.)'),
+      ),
+      'theme' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => t('The theme under which the resource_rules settings apply.')
+      ),
+      'visibility' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+        'description' => t('Flag to indicate how to show resource_rules on pages. (0 = Show on all pages except listed pages, 1 = Show only on listed pages, 2 = Use custom PHP code to determine visibility)'),
+      ),
+      'weight' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('resource_rules weight within resource_rules.'),
+      )
+    ),
+    'primary key' => array('sid')
+  );
+
+  $schema['resource_rules_roles'] = array(
+    'description' => t('Sets up access permissions for Resource Rules based on user roles'),
+    'fields' => array(
+      'rid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t("The user's role ID from {users_roles}.rid."),
+      ),
+      'sid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => t("The resource_rules's ID from {resource_rules_data}.sid."),
+      ),
+    ),
+    'primary key' => array(
+      'rid',
+      'sid',
+    ),
+    'indexes' => array(
+      'rid' => array('rid'),
+    ),
+  );
+
+  return $schema;
+}

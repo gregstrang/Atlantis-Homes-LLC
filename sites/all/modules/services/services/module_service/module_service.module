@@ -1,0 +1,166 @@
+<?php
+// $Id: module_service.module,v 1.5.2.17 2008/09/06 04:13:08 marcingy Exp $
+/**
+ * @author Services Dev Team
+ * @file
+ *  Link general module functionalities to services module.
+ */
+
+
+/**
+ * Implementation of hook_help().
+ */
+function module_service_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#services_module':
+      return '<p>'. t('Provides module methods to services applications. Requires services.module.') .'</p>';
+    case 'admin/modules#description':
+      return t('Provides module methods to services applications. Requires services.module.');
+  }
+}
+
+/**
+ * Implementation of hook_perm().
+ */
+function module_service_perm() {
+  return array(
+    'load any module data', 'load own module data'
+  );
+}
+
+/**
+ * Implementation of hook_service().
+ */
+function module_service_service() {
+
+	return array(
+		array(
+			'#method' 		=> 'module.list',
+			'#callback' 		=> 'module_service_list',
+			'#file' 		=> array('file' => 'inc', 'module' => 'module_service'),
+			'#key'			=> FALSE,
+			'#return'		=> 'struct',
+			'#help'			=> t('Returns a list of module and their statuses.')
+		),
+		array(
+			'#method' 		=> 'module.activate',
+			'#callback' 		=> 'module_service_activate',
+			'#file' 		=> array('file' => 'inc', 'module' => 'module_service'),
+			'#key'			=> FALSE,
+			'#args'			=> array(
+							array(
+								'#name' => 'module',
+								'#type' => 'string',
+								'#description'=> t('A module name.')
+							),
+						),
+			'#return'		=> 'struct',
+			'#help'			=> t('Activates a module')
+		),
+		array(
+			'#method' 		=> 'module.deactivate',
+			'#callback' 		=> 'module_service_deactivate',
+			'#file' 		=> array('file' => 'inc', 'module' => 'module_service'),
+			'#key'			=> FALSE,
+			'#args'			=> array(
+							array(
+								'#name' => 'module',
+								'#type' => 'string',
+								'#description'=> t('A module name.')
+							),
+						),
+			'#return'		=> 'struct',
+			'#help'			=> t('Deactivates a module')
+		),
+		array(
+			'#method' 		=> 'module.install',
+			'#callback' 		=> 'module_service_install',
+			'#file' 		=> array('file' => 'inc', 'module' => 'module_service'),
+			'#key'			=> FALSE,
+			'#args'			=> array(
+							array(
+								'#name' => 'module',
+								'#type' => 'string',
+								'#description'=> t('A module name.')
+							),
+							array(
+								'#name' => 'version',
+								'#type' => 'string',
+								'#description'=> t('The version of the module to install.')
+							),
+						),
+			'#return'		=> 'struct',
+			'#help'			=> t('Returns a list of module and their statuses.')
+		),
+		array(
+			'#method' 		=> 'module.save',
+			'#callback' 		=> 'module_service_save',
+			'#file' 		=> array('file' => 'inc', 'module' => 'module_service'),
+			'#key'			=> FALSE,
+			'#args'			=> array(
+							array(
+								'#name' => 'filename',
+								'#type' => 'string',
+								'#description'=> t('A filename.')
+							),
+							array(
+								'#name' => 'file',
+								'#type' => 'string',
+								'#description'=> t('A base64-encoded file')
+							),
+						),
+			'#return'		=> 'struct',
+			'#help'			=> t('Outputs a file into the incoming directory')
+		),
+	);
+
+  return array(
+
+    // module.get
+    array(
+      '#method'           => 'module.get',
+      '#callback'         => 'module_service_get',
+      '#access callback'  => 'module_service_get_access',
+      '#file'             => array('file' => 'inc', 'module' => 'module_service'),
+      '#key'              => FALSE,
+      '#args'             => array(
+        array(
+          '#name'           => 'nid',
+          '#type'           => 'int',
+          '#description'    => t('A module ID.')),
+        array(
+          '#name'           => 'fields',
+          '#type'           => 'array',
+          '#optional'       => TRUE,
+          '#description'    => t('A list of fields to return.'))),
+      '#return'           => 'struct',
+      '#help'             => t('Returns a module data.')),
+
+    // module.save
+    array(
+      '#method'           => 'module.save',
+      '#callback'         => 'module_service_save',
+      '#access callback'  => 'module_service_save_access',
+      '#file'             => array('file' => 'inc', 'module' => 'module_service'),
+      '#args'             => array(
+        array(
+          '#name'           => 'module',
+          '#type'           => 'struct',
+          '#description'    => t('A module object. Upon creation, module object must include "type". Upon update, module object must include "nid" and "changed".'))),
+      '#return'           => 'struct',
+      '#help'             => t('Save a module object into the database.')),
+
+    // module.delete
+    array(
+      '#method'           => 'module.delete',
+      '#callback'         => 'module_delete',
+      '#access callback'  => 'module_service_delete_access',
+      '#file'             => array('file' => 'inc', 'module' => 'module_service'),
+      '#args'             => array(
+        array(
+          '#name'           => 'nid',
+          '#type'           => 'int',
+          '#description'    => t('A module ID.'))),
+      '#help'             => t('Delete a module.')),
+  );
+}

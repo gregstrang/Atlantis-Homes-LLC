@@ -1,0 +1,16 @@
+; $Id: inclind_ctm.info,v 1.1 2009/2/20 16:28:00 petes Exp $
+name = "Inclind Menu Settings per Content Type"
+description = "This module allow to set menu settings for individual content types"
+package = "Inclind"
+dependencies[] = "menu_breadcrumb"
+dependencies[] = "inclind_menu"
+core = 6.x
+project = "inclind ctm"
+
+
+; Information added by drupal.org packaging script on 2008-11-24
+version = "6.x-1.0"
+core = "6.x"
+project = "inclind ctm"
+datestamp = "1227532508"
+

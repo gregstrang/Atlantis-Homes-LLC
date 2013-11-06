@@ -1,0 +1,16 @@
+/******************************
+ HORIZONTAL (down) menus
+******************************/
+
+/* Container Layout */
+div#nav {background:transparent url(./images/layout/navShadowBottom.gif) left 71px repeat-x;}
+ul.nice-menu-down li {border-color:#94CA96;}
+
+/* Primary Anchors */
+ul.nice-menu-down li a:link, ul.nice-menu-down li a:visited {background:transparent url(./images/layout/primaryLinksBackground.jpg) top left repeat-x; color:#126932; border-color:#fff;}
+ul.nice-menu-down li a:hover, ul.nice-menu-down li a:active {background:#94CA96; color:#fff; border-bottom:2px solid #94CA96;}
+
+/* Secondary Anchors */
+ul.nice-menu-down li ul li a:link, ul.nice-menu-down li ul li a:visited {color:#24316e; background:#fff;}
+ul.nice-menu-down li ul li a:hover, ul.nice-menu-down li ul li a:active {background:#94CA96; color:#fff;}
+ul.nice-menu-down li ul li ul {border:1px solid #fff;}

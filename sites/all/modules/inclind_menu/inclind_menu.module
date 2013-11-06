@@ -1,0 +1,453 @@
+<?php
+// $Id: inclind_menu.module,v 1.34.2.1 2008/11/05 14:19:15 pstein Exp $
+
+
+function inclind_menu_views_data() {
+$data = array();
+
+// Term name field
+$data['term_data']['name_inclind'] = array(
+	
+'title' => t('Term with NAT support (Inclind)'),
+
+'help' => t('Taxonomy terms. Supports the Inclind-NAT menu technology. Note that using this can cause duplicate nodes to appear in views; you must add filters to reduce the result set.'),
+'field' => array(
+	'real field' => 'name',
+'handler' => 'views_handler_field_taxonomy_inclind',
+'click sortable' => TRUE,
+),
+'sort' => array(
+'handler' => 'views_handler_sort',
+),
+'argument' => array(
+'handler' => 'views_handler_argument_string',
+'help' => t('Taxonomy term name.'),
+'many to one' => TRUE,
+'empty name field' => t('Uncategorized'),
+),
+);
+
+return $data;
+
+}
+
+function inclind_menu_views_handlers() {
+
+return array(
+'info' => array(
+'path' => drupal_get_path('module', 'inclind_menu') .'/views',
+),
+'handlers' => array(
+'views_handler_field_taxonomy_inclind' => array(
+'parent' => 'views_handler_field',
+),
+),
+);
+}
+
+
+function inclind_menu_hook_taxonomy($op, $type, $array) {
+	switch ($op) {
+		case 'delete':
+			break;
+
+	}
+}
+
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function inclind_menu_form_alter(&$form, &$form_state, $form_id) {
+	$menu_vocabularies = variable_get($form['type']['#value'].'_menu_vocabularies', array());
+	if (is_array($form['taxonomy'])) {
+		foreach ($form['taxonomy'] AS $vid => $vocabulary) {
+			if (array_key_exists($vid, $menu_vocabularies)) {
+				unset($form['taxonomy'][$vid]);
+			}
+		}
+	}
+
+	// Menu Setting for content types - Content Type Form
+	if ($form_id == 'node_type_form') {
+		$default_values = variable_get($form['#node_type']->type.'_menu_vocabularies', array());
+
+		foreach ( taxonomy_get_vocabularies() AS $vid => $vocab) {
+			$options[$vid] = $vocab->name;
+		}
+		
+		$form['menu_settings']['menu_vocabularies'] = array(
+			'#type' => 'checkboxes',
+			'#title' => t('Choose vocabularies that are tied to menus for this content type'),
+			'#default_value' => $default_values,
+			'#options' => $options,
+		);
+
+		$form['#submit'][] = 'inclind_menu_node_type_form_submit';
+
+		$form['#submit'][] = 'menu_node_form_submit';
+	} elseif ($form_id == 'node_type_delete_confirm') {
+		// Delete Content Type
+		$form['#submit'][] = 'inclind_menu_node_type_delete_confirm';
+	}
+
+	if ($form['#id'] == 'node-form') {
+		drupal_add_js( drupal_get_path('module', 'inclind_menu') . '/js/inclind_menu.js', 'module');
+	
+		$form['menu']['link_title']['#required'] = true;
+		$form['menu']['parent']['#required'] = true;
+		$form['menu']['delete']['#attributes'] = array('style' => 'display:none');
+		$form['menu']['delete']['#title'] = '';
+	
+		if (!is_array($form['#submit'])) 
+			$form['#submit'] = array();
+			$form['#submit'][] = 'inclind_menu_node_form_submit';
+	
+		if (arg(1) == 'add') {
+			$form['menu']['hidden'] = array(
+				'#type' => 'checkbox',
+				'#title' => t('Disable this menu item'),
+				'#default_value' => 1,
+				'#weight' => 1,
+				'#description' => t('Menu items that are disabled will not be listed in any menu.'),
+			);
+		} elseif (arg(2) == 'edit') {
+			$menuLink = menu_link_load($form['menu']['mlid']['#value']);
+
+			$form['menu']['hidden'] = array(
+				'#type' => 'checkbox',
+				'#title' => t('Disable this menu item'),
+				'#default_value' => $menuLink['hidden'],
+				'#weight' => 1,
+				'#description' => t('Menu items that are disabled will not be listed in any menu.'),
+			);
+		}
+	}
+}
+
+function _inclind_menu_node_form_submit($form, &$form_state) {
+	if ($form['menu']['hidden']['#value'] == 1) {
+		$query = 'UPDATE {menu_links} SET hidden = 1 WHERE mlid = '.$form['menu']['mlid']['#value'].'';
+		db_query($query);
+	}
+	if ($form['menu']['hidden']['#value'] == 0) {
+		$query = 'UPDATE {menu_links} SET hidden = 0 WHERE mlid = '.$form['menu']['mlid']['#value'].'';
+		db_query($query);
+	}
+}
+
+
+function update_node_term_parent($nid, $new_parent = null) {
+	if (!is_numeric($nid))
+		return;
+
+	/*
+	here's the deal with $new_parent: if update_node_term_parent is called from
+	hook_menu_link_alter, the menu hasn't actually been updated yet, so we don't
+	know what the menu parent is just from checking the database. so hook_nodeapi
+	can just call this function as is, but hook_menu_link_alter will have to 
+	explicitly pass in the new parent.
+	*/
+
+
+	$node = node_load($nid, array(), TRUE);
+
+	if ($node == null)
+		return;
+
+	$menu_parent = variable_get($node->type.'_menu_parent', NULL);
+	$menu_parent_name = preg_replace("/:.*/", "", $menu_parent);
+
+	$menu_item = db_fetch_array(db_query("SELECT mlid, plid FROM {menu_links} WHERE link_path = 'node/" . $node->nid . "'"));
+
+	$plid = "";
+
+	if ($new_parent)
+		$plid = $new_parent;
+	else
+		$plid = $menu_item['plid'];
+
+	$parent_item = menu_link_load($plid);
+
+	$parent_link = $parent_item['link_path'];
+	$parent_nid = preg_replace('/node\//i', '', $parent_link);
+	$parent = node_load($parent_nid);
+
+	if (!isset($parent->nat))
+		$parent->nat = array();
+
+	if (isset($node->nat)) {
+		// 1. update the parent of the NAT term for this node, if any
+		foreach ($node->nat AS $tid => $term) {
+			foreach ($parent->nat AS $parent_tid => $parent_term) {
+				if ($term->vid == $parent_term->vid) {
+					// the parent menu item's term has the same vocab as the child menu item's term. 
+					// therefore, the child item's term should be moved inside of the parent's term
+
+					$form_values = array(
+						'tid' => $tid,
+						'name' => $term->name,
+						'parent' => $parent_tid
+					);
+	if ($nid == 481) {
+		print "saving form values 194<BR>";
+	}
+					taxonomy_save_term($form_values);
+				}
+			}
+		}
+	}
+
+	$menu_vocabularies = variable_get($node->type.'_menu_vocabularies', array());
+	$new_tids = array();
+
+	/*
+	note: can't do node_load and then refer to node->taxonomy, because of a longstanding Drupal bug 
+	where you can't force Drupal to refresh the taxonomy data for a node. So if the node was recently
+	saved, you might still get the old data. taxonomy_node_get_terms() pulls directly from the 
+	database.
+	*/
+
+
+	$node_terms = inclind_taxonomy_node_get_terms($node);
+
+	foreach ($node_terms AS $tid => $term) {
+		if (!array_key_exists($term->vid, $menu_vocabularies)) {
+			// this is a regular taxonomy term that is not affected by the special menu-taxonomy code. 
+			// this term needs to be saved
+			$new_tids[] = $tid;
+		}
+	}
+
+
+	// 2. update the taxonomy term of this node, if any, if it is a menu-based taxonomy term 
+	foreach ($menu_vocabularies AS $vid) {
+		// b. add any new term associations for this node in this vocabulary based on the parent
+		// (as indicated in the content type settings)
+
+		foreach ($parent->nat AS $parent_tid => $parent_term) {
+			if ($parent_term->vid == $vid) {
+				$new_tids[] = $parent_term->tid;
+			}
+		}
+	}
+
+	taxonomy_node_save($node, $new_tids);
+}
+
+
+function inclind_menu_menu_link_alter(&$item, $menu) {
+	$this_mid = $item['mlid'];
+	$parent_mid = $item['plid'];
+	$this_path = $item['link_path'];
+
+	if (
+		stristr($this_path, "node/") !== false
+	) {
+		$this_nid = str_replace("node/", "", $this_path);
+		update_node_term_parent($this_item->nid, $parent_mid);
+	}
+}
+
+
+/**
+ *Content Type Form Submit - Save Menu Settings for Content Type. 
+ */
+function inclind_menu_node_type_form_submit(&$form, $form_state) {
+	$menu_vocabularies = array_filter($form_state['values']['menu_vocabularies']);
+
+	if ($menu_vocabularies) {
+		variable_set($form_state['values']['type'].'_menu_vocabularies', $menu_vocabularies);
+	} else {
+		variable_del($form_state['values']['type'].'_menu_vocabularies');
+	}
+
+}
+
+
+/**
+ *Delete Content Type Form Submit - Delete Menu Settings Variable. 
+ */
+function inclind_menu_node_type_delete_confirm(&$form, $form_state) {
+	variable_del($form_state['values']['type'].'_menu_vocabularies');
+}
+
+
+/**
+ * Implementation of hook_nodeapi().
+ */
+function inclind_menu_nodeapi(&$node, $op, $teaser, $page) {
+if (!function_exists("_nat_variable_get"))
+return;
+
+	$nat_config = _nat_variable_get();
+	if (!isset($nat_config['types'][$node->type]) || empty($nat_config['types'][$node->type])) {
+		//return;
+	}
+
+	switch ($op) { 
+		case 'insert':
+		case 'update':
+			update_node_term_parent($node->nid);
+		break;
+	}
+}
+
+
+/**
+ * Implementation of hook_node_operations().
+ */
+function inclind_menu_node_operations() {
+$operations = array(
+'update_inclind_menu' => array(
+'label' => t('Update menu assignment'),
+'callback' => 'inclind_menu_operations_update',
+),
+);
+
+return $operations;
+}
+
+
+function inclind_menu_operations_update($nodes) {
+	foreach ($nodes as $nid) {
+
+		require_once("modules/node/node.pages.inc");
+		$node = node_load($nid);
+	
+		node_object_prepare($node);
+		if ($node->menu['mlid'] == 0) {
+			// this node has no menu item
+
+
+			$special_vocabulary = variable_get($node->type . '_menu_vocabularies', array());
+			$special_vocabulary = end($special_vocabulary);
+
+			if (!(is_numeric($special_vocabulary) && $special_vocabulary != 0))
+				continue;
+
+			$parent_mlid = 0;
+			foreach ($node->taxonomy AS $tid => $term) {
+				if ($term->vid == $special_vocabulary) {
+					$parent_nid = db_fetch_array(db_query("SELECT nid FROM {nat} WHERE vid = $special_vocabulary && tid = $tid"));
+					$parent_nid = $parent_nid['nid'];
+					$parent_mlid = db_fetch_array(db_query("SELECT mlid FROM {menu_links} WHERE link_path = 'node/$parent_nid'"));
+					$parent_mlid = $parent_mlid['mlid'];
+					break;
+				}
+			}
+
+			$item = array(
+				'link_path' => 	'node/' . $node->nid,
+				'link_title' => $node->title,
+				'plid' => 	$parent_mlid,
+				'hidden' => 	1,
+			);
+
+
+			menu_link_save($item);
+		}
+	}
+}
+
+
+
+
+/**
+ * Find all terms associated with the given node, ordered by vocabulary and term weight.
+ * Why do we need this? Because Drupal insists on using the static keyword EVERYWHERE without 
+ * allowing for the ability to reset the variable.
+ */
+function inclind_taxonomy_node_get_terms($node, $key = 'tid') {
+static $terms; 
+
+if (!isset($terms[$node->vid][$key])) {
+$result = db_query(db_rewrite_sql('SELECT t.* FROM {term_node} r INNER JOIN {term_data} t ON r.tid = t.tid INNER JOIN {vocabulary} v ON t.vid = v.vid WHERE r.vid = %d ORDER BY v.weight, t.weight, t.name', 't', 'tid'), $node->vid);
+$terms[$node->vid][$key] = array(); 
+while ($term = db_fetch_object($result)) {
+$terms[$node->vid][$key][$term->$key] = $term;
+}
+}
+return $terms[$node->vid][$key];
+}
+
+
+function inclind_menu_preprocess_page(&$variables) {
+	$breadcrumb = drupal_get_breadcrumb();
+
+	if (variable_get('menu_breadcrumb_append_node_title', 0) == 1) {
+		if (variable_get('menu_breadcrumb_append_node_url', 0) == 1) {
+			$breadcrumb[] = l(drupal_get_title(), $_GET['q']);
+		} else {
+			$breadcrumb[] = drupal_get_title();
+		}
+	}
+
+	if (count($breadcrumb) == 1 && variable_get('menu_breadcrumb_hide_on_single_item', 0)) {
+		$breadcrumb = array();
+	}
+
+	drupal_set_breadcrumb($breadcrumb);
+
+	$variables['breadcrumb'] = theme('breadcrumb', drupal_get_breadcrumb());
+}
+
+function inclind_menu_init() {
+
+	variable_set('site_404', 'inclind404');
+
+}
+
+function inclind_menu_menu() {
+  $items = array();
+
+  $items['inclind404'] = array(
+    'title' => t('Page not found'),
+                'access callback' => TRUE,
+    'page callback' => 'inclind_menu_404_page',
+                'type' => MENU_LOCAL_TASK
+        );
+  return $items;
+}
+
+function inclind_menu_404_page() {
+
+$this_path = getenv('request_uri');
+$this_path = ltrim($this_path, '/');
+
+if ( !(strpos($this_path, '.htm') >= strlen($this_path) - 4)) {
+	// doesn't end in .htm
+
+	$max_depth = 2;
+	$temp_path = $this_path;
+	while ($max_depth >= 0) {
+		$max_depth--;
+		
+		if (inclind_path_exists($temp_path)) {
+			$_REQUEST['destination'] = $temp_path;
+			drupal_goto($temp_path, 301);
+			return;
+		}
+		$temp_path_with_index = $temp_path . '/index.htm';
+
+		if (inclind_path_exists($temp_path_with_index)) {
+			$_REQUEST['destination'] = $temp_path_with_index;
+			drupal_goto($temp_path_with_index, 301);
+			return;
+		}
+
+		$temp_path = preg_replace('/\/[^\/]*$/', '', $temp_path);
+	}
+
+}
+
+drupal_set_title("D'oh!");
+return	search404_page($arg);
+
+}
+
+
+// cannot believe this does not exist already
+function inclind_path_exists($path) {
+	return menu_valid_path(array('link_path' => drupal_get_normal_path($path)));
+}

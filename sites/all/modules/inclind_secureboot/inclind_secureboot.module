@@ -1,0 +1,27 @@
+<?php
+// $Id: inclind_secureboot.module,v 1.0 2009/02/01 12:00:00 kquillen Exp $
+
+/**
+ * @file
+ * Helps Admin Menu render after logging in through SecureSite.
+ */
+
+
+/**
+ * Implementation of hook_boot().
+ */
+
+function inclind_secureboot_boot() {
+  if (isset($_GET['q']) && ($_GET['q'] != "logout")) {
+	  if (isset($_SESSION['securesite_login']) && $_SESSION['securesite_login'] == "TRUE" && (!(isset($_SESSION['securesite_guest'])))) {
+		if (!(isset($_SESSION['firstLoginPageLoad']))) {
+			$_SESSION['firstLoginPageLoad'] = "TRUE";
+			header('Location: http://'.$_SERVER['SERVER_NAME'].'');
+		}
+	  }
+  } elseif (isset($_GET['q']) && ($_GET['q'] != "logout") && preg_match('/Chrome/', $_SERVER['HTTP_USER_AGENT']) && (!(isset($_SESSION['securesite_guest'])))) {
+	 // Correct the quirky Chrome logout issue. Permanently destroy the session.
+	 session_destroy();
+	 header('Location: http://'.$_SERVER['SERVER_NAME'].'');
+  }
+}

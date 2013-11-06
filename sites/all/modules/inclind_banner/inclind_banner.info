@@ -1,0 +1,16 @@
+; $Id: inclind_banner.info,v 1.6 2009/01/27 20:54:37 kquillen Exp $
+name = Inclind Banner
+description = Simple and effective banner management. Not to be confused with 'Advertisements'.
+core = 6.x
+dependencies[] = image
+dependencies[] = image_gallery
+dependencies[] = image_cycle
+package = Inclind
+
+
+; Information added by drupal.org packaging script on 2009/01/27
+version = "6.x-1.2"
+core = "6.x"
+project = "inclind"
+datestamp = "1225930175"
+
