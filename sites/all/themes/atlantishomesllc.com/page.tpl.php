@@ -8,6 +8,7 @@
         <?php print $styles ?>
         <?php print $scripts ?>
         <!--[if IE]><?php print phptemplate_get_ie_styles(); ?><![endif]-->
+        <script src='//www.adreadytractions.com/rt/590931?p=54841'></script>
 	</head>
 	
     <body<?php print phptemplate_body_class($left, $right); ?>>
